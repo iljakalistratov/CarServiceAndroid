@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
         Toast.makeText(this, "Selected Car" + this.getLocalCarlist().get(position).getModel(), Toast.LENGTH_SHORT);
 
         Intent intent = new Intent(this, EditCarActivity.class);
+        intent.putExtra("CAR", carList.get(position));
         startActivity(intent);
     }
 

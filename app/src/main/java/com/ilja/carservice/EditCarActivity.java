@@ -59,7 +59,7 @@ public class EditCarActivity extends AppCompatActivity {
 
         if (bundle != null) {
             carToEdit = (Car) bundle.get("CAR");
-            editText_id.setHint(carToEdit.getId());
+            editText_id.setHint(String.valueOf(carToEdit.getId()));
             editText_model.setHint(carToEdit.getModel());
             editText_brand.setHint(carToEdit.getBrand());
             editText_leistung.setHint(carToEdit.getLeistung());
@@ -70,7 +70,7 @@ public class EditCarActivity extends AppCompatActivity {
 
     }
 
-    public void ediCarButton(View view) throws JSONException {
+    public void editCarButton(View view) throws JSONException {
         Car editCar = new Car();
         editCar.setId(carToEdit.getId());
 

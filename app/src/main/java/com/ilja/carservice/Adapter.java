@@ -50,7 +50,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return carList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView carModel, carID, carBrand;
         ClickListener clickListener;
 
@@ -58,6 +58,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView, ClickListener clickListener) {
             super(itemView);
             this.clickListener = clickListener;
+            itemView.setOnClickListener(this);
 
 
 
@@ -74,6 +75,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 //                }
 //            });
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 

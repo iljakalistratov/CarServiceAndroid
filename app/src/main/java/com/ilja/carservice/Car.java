@@ -1,6 +1,8 @@
 package com.ilja.carservice;
 
-public class Car {
+import java.io.Serializable;
+
+public class Car implements Serializable {
 
     int id;
     String model;
