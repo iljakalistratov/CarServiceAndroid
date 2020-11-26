@@ -1,6 +1,7 @@
 package com.ilja.carservice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,12 +65,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             carID = itemView.findViewById(R.id.carID);
             carBrand = itemView.findViewById(R.id.carBrand);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Do something with this click", Toast.LENGTH_SHORT).show();
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(v.getContext(), "Do something with this click", Toast.LENGTH_SHORT).show();
+//
+//
+//                }
+//            });
 
         }
     }

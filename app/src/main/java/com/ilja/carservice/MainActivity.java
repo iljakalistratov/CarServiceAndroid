@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
         getJsonData();
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -165,11 +169,39 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
     @Override
     public void onItemClick(int position, View v) {
+        Toast.makeText(this, "Selected Car" + this.getLocalCarlist().get(position).getModel(), Toast.LENGTH_SHORT);
 
+        Intent intent = new Intent(this, EditCarActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onItemLongClick(int position, View v) {
 
     }
+
+    public void editCar(Context context, Car editCar) throws JSONException {
+        String URL = "http://192.168.0.108:8080/car/" + editCar.getId();
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        Gson gson = new Gson();
+        String carJSON = gson.toJson(editCar);
+
+        JSONObject json = new JSONObject(carJSON);
+
+        JsonObjectRequest editRequest = new JsonObjectRequest(Request.Method.PUT, URL, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("Response Create", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.getMessage());
+            }
+        });
+        queue.add(editRequest);
+    }
+
 }
