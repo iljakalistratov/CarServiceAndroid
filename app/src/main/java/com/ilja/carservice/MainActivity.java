@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
         }
     };
 
-    private void addCarButton(View view) {
+    public void addCarButton(View view) {
         Toast.makeText(this, "Add Car ", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(this, CreateCarActivity.class);
@@ -111,6 +111,5 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
     public void onItemLongClick(int position, View v) {
 
     }
-
 
 }

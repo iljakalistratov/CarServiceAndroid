@@ -119,9 +119,28 @@ public class CarDao {
         queue.add(editRequest);
     }
 
-//    public void createCar(CreateCarActivity createCarActivity, Car createCar) {
-//
-//    }
+    public void createCar(Context context, Car createCar) throws JSONException {
+        String URL = "http://192.168.137.1:8080/car/";
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        Gson gson = new Gson();
+        String carJSON = gson.toJson(createCar);
+
+        JSONObject json = new JSONObject(carJSON);
+
+        JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.POST, URL, json, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("Response Create", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.getMessage());
+            }
+        });
+        queue.add(createRequest);
+    }
 
     public ArrayList<Car> getLocalCarlist() {
         return carList;

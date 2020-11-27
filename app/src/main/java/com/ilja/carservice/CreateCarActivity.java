@@ -15,7 +15,6 @@ public class CreateCarActivity extends AppCompatActivity {
 
     private CarDao carDao;
 
-    private EditText editText_id;
     private EditText editText_model;
     private EditText editText_brand;
     private EditText editText_leistung;
