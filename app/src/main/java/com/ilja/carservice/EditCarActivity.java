@@ -33,12 +33,15 @@ public class EditCarActivity extends AppCompatActivity {
     private Car carToEdit;
 
     private MainActivity mainActivity;
+    private CarDao carDao;
 
 
     @Override
     public void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_car);
+
+        carDao = new CarDao();
 
         cardView_id = findViewById(R.id.cardView_car_ec_id);
         saveButton = findViewById(R.id.button_car_edit);
@@ -100,9 +103,7 @@ public class EditCarActivity extends AppCompatActivity {
             editCar.setVerbrauch(editText_verbrauch.getText().toString());
         }
 
-//        Log.e("Test", editCar.getModel());
-//        Log.e("Log", this.toString());
-        MainActivity.editCar( this, editCar);
+        carDao.editCar( this, editCar);
 
     }
 

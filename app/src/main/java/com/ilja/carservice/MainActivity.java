@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
     private CarDao carDao;
     private ActionMode actionMode;
     private Adapter adapter;
-    private ArrayList<Car> carList = new ArrayList<>();
     private RecyclerView recyclerView;
 
     @Override
@@ -52,13 +51,19 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
         //RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
 
-        //download JSON Data
-        getJsonData();
+
+        //setup CarDAO
+        carDao = new CarDao();
+
 
         //RecyclerView Adapter
-        adapter = new Adapter(MainActivity.this, getLocalCarlist(), MainActivity.this);
+        adapter = new Adapter(MainActivity.this, carDao.getLocalCarlist(), MainActivity.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        //download JSON Data
+        carDao.getJsonData(this, adapter, MainActivity.this);
 
         //Swipe
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
@@ -66,84 +71,12 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
     }
 
-    private void getJsonData() {
-        String URL = "http://192.168.137.1:8080/carlist";
-        final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject carObject = response.getJSONObject(i);
-
-                        Car car = new Car();
-
-                        car.setId(carObject.getInt("id"));
-                        car.setModel(carObject.getString("model"));
-                        car.setBrand(carObject.getString("brand"));
-                        car.setLeistung(carObject.getString("leistung"));
-                        car.setBaujahr(carObject.getString("baujahr"));
-                        car.setMotor(carObject.getString("motor"));
-                        car.setVerbrauch(carObject.getString("verbrauch"));
-
-                        carList.add(car);
-
-
-                    }
-
-                    adapter.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error getting Data from Server", Toast.LENGTH_LONG).show();
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(request);
-    }
-
-    public ArrayList<Car> getLocalCarlist() {
-        return carList;
-    }
-
-
-    public void deleteCar(int id) {
-        int carID = getRealCarID(id);
-        String URL = "http://192.168.137.1:8080/car/" + carID;
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("Response:", response);
-                reloadData();
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error:", error.getMessage());
-                    }
-                });
-        queue.add(deleteRequest);
-    }
-
-    private int getRealCarID(int carPosition) {
-        return getLocalCarlist().get(carPosition).getId();
-    }
 
     public void reloadData() {
-        carList.clear();
+        carDao.getLocalCarlist().clear();
         recyclerView.removeAllViews();
-        getJsonData();
+        carDao.getJsonData(this, adapter, MainActivity.this);
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -154,26 +87,23 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            deleteCar(viewHolder.getAdapterPosition());
+            carDao.deleteCar(MainActivity.this ,viewHolder.getAdapterPosition(), MainActivity.this);
         }
     };
 
+    private void addCarButton(View view) {
+        Toast.makeText(this, "Add Car ", Toast.LENGTH_SHORT).show();
 
-//    public int getCarPosition() {
-//        return carPosition;
-//    }
-
-
-//    public void setCarPosition(int carPosition) {
-//        this.carPosition = carPosition;
-//    }
+        Intent intent = new Intent(this, CreateCarActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onItemClick(int position, View v) {
-        Toast.makeText(this, "Selected Car" + this.getLocalCarlist().get(position).getModel(), Toast.LENGTH_SHORT);
+        Toast.makeText(this, "Selected Car" + carDao.getLocalCarlist().get(position).getModel(), Toast.LENGTH_SHORT);
 
         Intent intent = new Intent(this, EditCarActivity.class);
-        intent.putExtra("CAR", carList.get(position));
+        intent.putExtra("CAR", carDao.getLocalCarlist().get(position));
         startActivity(intent);
     }
 
@@ -182,30 +112,5 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
     }
 
-    public static void editCar(Context context, Car editCar) throws JSONException {
-        String URL = "http://192.168.137.1:8080/car/" + editCar.getId();
-
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        Gson gson = new Gson();
-        String carJSON = gson.toJson(editCar);
-
-        JSONObject json = new JSONObject(carJSON);
-
-        JsonObjectRequest editRequest = new JsonObjectRequest(Request.Method.PUT, URL, json,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("Response Create", response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error", Objects.requireNonNull(error.getMessage()));
-            }
-        });
-        queue.add(editRequest);
-    }
 
 }
