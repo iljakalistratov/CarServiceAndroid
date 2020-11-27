@@ -50,7 +50,7 @@ public class CreateCarActivity extends AppCompatActivity {
         editText_verbrauch = findViewById(R.id.editText_car_verbrauch);
     }
 
-    public void addCarButton(View view) throws JSONException {
+    public void createCarButton(View view) throws JSONException {
         Car createCar = new Car();
 
         if (editText_model != null && !(editText_model.getText().length() == 0)) {
@@ -78,6 +78,7 @@ public class CreateCarActivity extends AppCompatActivity {
         }
 
         carDao.createCar(this, createCar);
+        finish();
 
     }
 }

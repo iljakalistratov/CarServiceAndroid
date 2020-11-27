@@ -42,6 +42,7 @@ public class EditCarActivity extends AppCompatActivity {
         setContentView(R.layout.create_car);
 
         carDao = new CarDao();
+        mainActivity = new MainActivity();
 
         cardView_id = findViewById(R.id.cardView_car_ec_id);
         saveButton = findViewById(R.id.button_car_edit);
@@ -104,6 +105,7 @@ public class EditCarActivity extends AppCompatActivity {
         }
 
         carDao.editCar( this, editCar);
+        finish();
 
     }
 
