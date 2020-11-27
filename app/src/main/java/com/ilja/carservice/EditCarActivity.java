@@ -3,10 +3,12 @@ package com.ilja.carservice;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -98,7 +100,9 @@ public class EditCarActivity extends AppCompatActivity {
             editCar.setVerbrauch(editText_verbrauch.getText().toString());
         }
 
-        mainActivity.editCar(this, editCar);
+//        Log.e("Test", editCar.getModel());
+//        Log.e("Log", this.toString());
+        MainActivity.editCar( this, editCar);
 
     }
 

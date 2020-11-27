@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Adapter.ClickListener {
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
     }
 
     private void getJsonData() {
-        String URL = "http://192.168.0.108:8080/carlist";
+        String URL = "http://192.168.137.1:8080/carlist";
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
     public void deleteCar(int id) {
         int carID = getRealCarID(id);
-        String URL = "http://192.168.0.108:8080/car/" + carID;
+        String URL = "http://192.168.137.1:8080/car/" + carID;
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -181,8 +182,10 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
 
     }
 
-    public void editCar(Context context, Car editCar) throws JSONException {
-        String URL = "http://192.168.0.108:8080/car/" + editCar.getId();
+    public static void editCar(Context context, Car editCar) throws JSONException {
+        String URL = "http://192.168.137.1:8080/car/" + editCar.getId();
+
+
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Gson gson = new Gson();
@@ -199,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.ClickList
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Error", error.getMessage());
+                Log.e("Error", Objects.requireNonNull(error.getMessage()));
             }
         });
         queue.add(editRequest);
