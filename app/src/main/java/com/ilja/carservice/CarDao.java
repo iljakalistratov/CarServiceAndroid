@@ -27,7 +27,7 @@ public class CarDao {
     private int carPosition;
 
     public void getJsonData(Context context, final Adapter adapter, final Context mainActivityContext) {
-        String URL = "http://192.168.137.1:8080/carlist";
+        String URL = "http://192.168.0.108:8080/carlist";
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
@@ -72,7 +72,7 @@ public class CarDao {
 
     public void deleteCar(Context context, int id, final MainActivity mainActivity) {
         int carID = getRealCarID(id);
-        String URL = "http://192.168.137.1:8080/car/" + carID;
+        String URL = "http://192.168.0.108:8080/car/" + carID;
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -94,7 +94,7 @@ public class CarDao {
 
 
     public void editCar(Context context, Car editCar) throws JSONException {
-        String URL = "http://192.168.137.1:8080/car/" + editCar.getId();
+        String URL = "http://192.168.0.108:8080/car/" + editCar.getId();
 
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -120,7 +120,7 @@ public class CarDao {
     }
 
     public void createCar(Context context, Car createCar) throws JSONException {
-        String URL = "http://192.168.137.1:8080/car/";
+        String URL = "http://192.168.0.108:8080/car/";
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Gson gson = new Gson();

@@ -28,7 +28,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     public Adapter(Context ct, ArrayList<Car> localCarList, ClickListener clickListener) {
         context = ct;
         carList = localCarList;
-        ArrayList<Car> carListAll = new ArrayList<>(carList);
+        List<Car> carListAll = new ArrayList<>(carList);
         this.mClickListener = clickListener;
     }
 
